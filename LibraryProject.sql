@@ -3,61 +3,61 @@ create database Library_Project;
 use Library_Project;
 
 create table Members (
-	Library_Card_#	Int			not null	identity(1,1),
+	Library_Card_#		Int		not null	identity(1,1),
 	First_Name		Char(30)	not null,
 	Last_Name		Char(30)	not null,
 	Address			Char(50)	null,
-	Phone			Int			null,
+	Phone			Int		null,
 	Email			Char(30)	null,
 	constraint		MembersPK	primary key(Library_Card_#)
 	);
 
 create table Catalog (
-	ISBN			Int			not null	identity(1,1),
+	ISBN			Int		not null	identity(1,1),
 	Title			Char(50)	not null,
 	Author			Char(30)	not null,
 	Genre			Char(50)	not null,
-	Edition			Int			null,
-	#_of_copies		Int			not null,
+	Edition			Int		null,
+	#_of_copies		Int		not null,
 	constraint		CatalogPK	primary key(ISBN)
 	);
 
 create table Copies (
-	Inventory_#		Int			not null	identity(1,1),
-	ISBN			Int			not null,
-	Year_Printed	Int			null,
+	Inventory_#		Int		not null	identity(1,1),
+	ISBN			Int		not null,
+	Year_Printed		Int		null,
 	Condition		Char(25)	null,
 	constraint		CopiesPK	primary key(Inventory_#),
 	constraint		CopiesFK	foreign key(ISBN)
-					references	Catalog(ISBN)
-								on update cascade
-								on delete cascade
+				references	Catalog(ISBN)
+						on update cascade
+						on delete cascade
 	);
 
 create table Loan (
-	Transaction_ID	Int			not null	identity(1,1),
-	Library_Card_#	Int			not null,
-	Inventory_#		Int			not null,
-	Date_Borrowed	date		not null,
+	Transaction_ID		Int		not null	identity(1,1),
+	Library_Card_#		Int		not null,
+	Inventory_#		Int		not null,
+	Date_Borrowed		date		not null,
 	Due_Date		date		not null,
-	Date_Returned	date		not null,
+	Date_Returned		date		not null,
 	constraint		LoanPK		primary key(Transaction_ID),
 	constraint		LoanFK1		foreign key(Library_Card_#)
-					references	Members(Library_Card_#),
+				references	Members(Library_Card_#),
 	constraint		LoanFK2		foreign key(Inventory_#)
-					references	Copies(Inventory_#),
+				references	Copies(Inventory_#),
 	);
 
 create table Loan_Copy_Int (
-	Transaction_ID	Int			not null,
-	Inventory_#		Int			not null,
+	Transaction_ID		Int		not null,
+	Inventory_#		Int		not null,
 	constraint		IntPK		primary key(Transaction_ID, Inventory_#),
 	constraint		IntFK1		foreign key(Transaction_ID)
-					references	Loan(Transaction_ID)
-								on update cascade
-								on delete cascade,
+				references	Loan(Transaction_ID)
+						on update cascade
+						on delete cascade,
 	constraint		IntFK2		foreign key(Inventory_#)
-					references	Copies(Inventory_#)
+				references	Copies(Inventory_#)
 	);
 
 insert into Members values ('Sarah', 'Cox', '120 Pecan Pl', '9794019', 'scox20@atu.edu');
